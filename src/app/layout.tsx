@@ -1,6 +1,6 @@
-import { ColorSchemeScript, MantineProvider } from "@mantine/core";
+import { ColorSchemeScript } from "@mantine/core";
 import "@mantine/core/styles.css";
-import { theme } from "../theme";
+import AppProviders from "./AppProviders";
 
 export const metadata = {
   title: "Mantine Next.js template",
@@ -19,7 +19,7 @@ export default function RootLayout({ children }: { children: any }) {
         />
       </head>
       <body>
-        <MantineProvider theme={theme}>{children}</MantineProvider>
+        <AppProviders>{children}</AppProviders>
       </body>
     </html>
   );
