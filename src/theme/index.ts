@@ -3,6 +3,18 @@
 import { createTheme } from "@mantine/core";
 
 export const theme = createTheme({
+  components: {
+    Text: {
+      defaultProps: {
+        color: "#071C42" // default color
+      }
+    },
+    Title: {
+      defaultProps: {
+        color: "#071C42"
+      }
+    }
+  },
   breakpoints: {
     xs: "36em", //576px
     sm: "48em", //768px

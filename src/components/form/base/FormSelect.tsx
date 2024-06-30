@@ -1,17 +1,12 @@
 import { Select, SelectProps } from "@mantine/core";
-import { Controller } from "react-hook-form";
+import { WithFormProps, withForm } from "src/hocs/withForm";
 
-export interface FormSelectProps extends SelectProps {
-  name: string;
-}
+export type FormSelectProps = SelectProps & WithFormProps;
 
-const FormSelect = ({ name, ...props }: FormSelectProps) => {
-  return (
-    <Controller
-      name={name}
-      render={({ field }) => <Select {...props} {...field} />}
-    />
-  );
-};
+const FormSelect = withForm<FormSelectProps>(
+  ({ renderProps: { extraFieldProps, field }, ...props }) => (
+    <Select {...extraFieldProps} {...field} {...props} />
+  )
+);
 
 export default FormSelect;

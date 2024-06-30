@@ -1,8 +1,8 @@
 import ky from "ky";
 import envs from "./envs";
 
-const kyApi = ky.create({
+const fetchApi = ky.create({
   prefixUrl: envs.apiURL
 });
 
-export default kyApi;
+export default fetchApi;

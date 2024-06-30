@@ -1,3 +1,4 @@
+import { Box, BoxProps, ElementProps } from "@mantine/core";
 import {
   FieldValues,
   FormProvider,
@@ -7,7 +8,8 @@ import {
 } from "react-hook-form";
 
 interface FormProps<T extends FieldValues>
-  extends Omit<React.ComponentProps<"form">, "onSubmit"> {
+  extends BoxProps,
+    ElementProps<"form", "onSubmit"> {
   methods: UseFormReturn<T, any, any>;
   onSubmit: SubmitHandler<T>;
   onSubmitError?: SubmitErrorHandler<any>;
@@ -21,7 +23,8 @@ const Form = <T extends FieldValues>({
 }: FormProps<T>) => {
   return (
     <FormProvider {...methods}>
-      <form
+      <Box
+        component="form"
         onSubmit={methods.handleSubmit(onSubmit, onSubmitError)}
         {...rest}
       />
