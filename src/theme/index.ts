@@ -1,32 +1,36 @@
-"use client";
+import {
+  createTheme,
+  DEFAULT_THEME,
+  DefaultMantineColor,
+  MantineColorShade
+} from "@mantine/core";
 
-import { createTheme } from "@mantine/core";
+export const breakpointsWithPx = {
+  xs: "576px",
+  sm: "640px",
+  md: "768px",
+  lg: "1024px",
+  xl: "1280px"
+};
 
-export const theme = createTheme({
-  components: {
-    Text: {
-      defaultProps: {
-        color: "#071C42" // default color
-      }
-    },
-    Title: {
-      defaultProps: {
-        color: "#071C42"
-      }
-    }
+// transforma la estructura de colores de Mantine a la de Tailwind
+export const twColors = Object.entries(DEFAULT_THEME.colors).reduce(
+  (acc, [key, value]) => {
+    acc[key] = value.reduce(
+      (acc, color, index) => {
+        acc[index as MantineColorShade] = color;
+        return acc;
+      },
+      {} as Record<MantineColorShade, string>
+    );
+
+    return acc;
   },
-  breakpoints: {
-    xs: "36em", //576px
-    sm: "48em", //768px
-    md: "62em", //992px
-    lg: "75em", //1200px
-    xl: "88em" //1408px
-  },
-  radius: {
-    xs: "0.125rem", //2px
-    sm: "0.25rem", //4px
-    md: "0.5rem", //8px
-    lg: "1rem", //16px
-    xl: "2rem" //32px
-  }
+  {} as Record<DefaultMantineColor, Record<MantineColorShade, string>>
+);
+
+const theme = createTheme({
+  breakpoints: breakpointsWithPx
 });
+
+export default theme;

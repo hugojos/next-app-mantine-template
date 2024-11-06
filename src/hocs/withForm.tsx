@@ -30,6 +30,8 @@ export const withForm = <P extends object>(
 
     const { formState } = useFormContext();
 
+    const { touchedFields } = formState;
+
     const name = props.name ?? "";
 
     const { errors } = formState;
@@ -43,7 +45,7 @@ export const withForm = <P extends object>(
       placeholder,
       label,
       description,
-      error
+      error: touchedFields[name] ? error : undefined
     };
 
     return (
