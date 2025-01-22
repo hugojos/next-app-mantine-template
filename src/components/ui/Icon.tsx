@@ -1,11 +1,11 @@
 "use client";
 import { Box, BoxProps, ElementProps } from "@mantine/core";
-import { ComponentPropsWithRef, Ref, forwardRef, useId } from "react";
+import React from "react";
 
 export interface IconProps
-  extends ElementProps<"svg", "size" | "ref" | "display" | "opacity">,
+  extends ElementProps<"svg", "size" | "display" | "opacity">,
     BoxProps {
-  i: IconFC;
+  i: React.FC;
   /**
    * @property xs: 16px
    * @property sm: 20px
@@ -15,54 +15,42 @@ export interface IconProps
    * @property 2xl: 40px
    */
   c?: string;
-  size?: keyof typeof styleBySize;
+  size?: keyof typeof stylesBySize | number;
 }
 
-export type IconFC = React.FC<
-  ComponentPropsWithRef<"svg"> & {
-    idprefix?: string;
-    idSuffix?: string;
-  }
->;
-
-const Icon = forwardRef(
-  (
-    {
-      i: I,
-      size = "md",
-      direction = "left",
-      style,
-      rotate,
-      ...rest
-    }: IconProps,
-    ref: Ref<any>
-  ) => {
-    /* 
+const Icon = ({
+  i: I,
+  size = "md",
+  direction = "left",
+  style,
+  rotate,
+  ...rest
+}: IconProps) => {
+  /* 
       Para que no haya colisiones de ids al renderizar el icono en varios lados, le pasamos este id a la prop idprefix.
       Esta prop es agregada gracias al archivo svgr-dynamic-ids.js que se encuentra en la raíz del proyecto.
     */
-    const id = useId();
 
-    return (
-      <Box
-        component={I}
-        {...styleBySize[size]}
-        viewBox="0 0 24 24"
-        ref={ref}
-        idprefix={id}
-        style={{
-          ...style,
-          transform: `rotate(${rotate}deg)`
-        }}
-        {...rest}
-      />
-    );
-  }
-);
+  return (
+    <Box
+      component={I}
+      {...(typeof size === "number"
+        ? {
+            height: size,
+            width: size
+          }
+        : stylesBySize[size])}
+      viewBox="0 0 24 24"
+      style={{
+        ...style,
+        transform: `rotate(${rotate}deg)`
+      }}
+      {...rest}
+    />
+  );
+};
 
-Icon.displayName = "Icon";
-
-const styleBySize = {
+const stylesBySize = {
   xs: {
     height: 16,
     width: 16
