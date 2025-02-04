@@ -4,8 +4,8 @@ import { WithFormProps, withForm } from "src/hocs/withForm";
 export type FormTextInputProps = WithFormProps & TextInputProps;
 
 const FormTextInput = withForm<FormTextInputProps>(
-  ({ renderProps: { extraFieldProps, field }, ...props }) => {
-    return <TextInput {...extraFieldProps} {...field} {...props} />;
+  ({ field, props, fieldState }) => {
+    return <TextInput {...field} {...props} />;
   }
 );
 

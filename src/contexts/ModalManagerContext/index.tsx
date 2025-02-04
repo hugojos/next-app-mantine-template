@@ -1,11 +1,10 @@
 "use client";
 import { ModalProps } from "@mantine/core";
-import { usePathname } from "next/navigation";
-import { createContext, useContext, useEffect, useMemo, useState } from "react";
+import { createContext, useContext, useMemo, useState } from "react";
 import { dynamicModals } from "src/components/modals";
 import {
   CloseModalFn,
-  IsOpenFn,
+  ModalKeys,
   ModalManagerValues,
   ShowModalFn,
   StatusModal,
@@ -17,70 +16,132 @@ const ModalManagerContext = createContext<ModalManagerValues | undefined>(
 );
 
 export const ModalManagerProvider = ({
-  children
+  children,
+  loadModals = []
 }: {
   children: React.ReactNode;
+  loadModals?: (ModalKeys | (string & {}))[];
 }) => {
-  const [statusModal, setStatusModal] = useState<StatusModal[]>([]);
-  const pathname = usePathname();
+  const modalKeys = useMemo(
+    () => Object.keys(dynamicModals) as ModalKeys[],
+    [dynamicModals]
+  );
+  const [statusModal, setStatusModal] = useState<
+    Record<ModalKeys, StatusModal>
+  >(() => {
+    const obj = {} as Record<ModalKeys, StatusModal>;
 
-  const showModal: ShowModalFn = (ns, key, props, options) => {
-    setStatusModal((prev) =>
-      options?.multiple ? [...prev, { ns, props, key }] : [{ key, props, ns }]
-    );
+    modalKeys.forEach((modalKey) => {
+      obj[modalKey] = {
+        key: modalKey,
+        opened: false,
+        openedAt: 0,
+        closedAt: 0,
+        preload: loadModals.some((loadModalKey) =>
+          modalKey.includes(loadModalKey)
+        ),
+        props: {}
+      };
+    });
+
+    return obj;
+  });
+
+  const showModal: ShowModalFn = (key, props, options) => {
+    setStatusModal((prevStatusModal) => {
+      const nextStatusModal = { ...prevStatusModal };
+      if (options?.multiple)
+        nextStatusModal[key] = {
+          ...nextStatusModal[key],
+          opened: true,
+          openedAt: Date.now(),
+          props
+        };
+      else
+        modalKeys.forEach((modalKey) => {
+          nextStatusModal[modalKey] = {
+            ...nextStatusModal[modalKey],
+            opened: false
+          };
+        });
+
+      nextStatusModal[key] = {
+        ...nextStatusModal[key],
+        opened: true,
+        openedAt: Date.now(),
+        props
+      };
+
+      return nextStatusModal;
+    });
   };
 
-  const closeModal: CloseModalFn = (ns, key) => {
-    if (ns === undefined) {
-      setStatusModal([]);
-      return;
-    }
-    setStatusModal((prev) =>
-      prev.filter(
-        (statusModal) => !(statusModal.ns === ns && statusModal.key === key)
-      )
-    );
-  };
+  const closeModal: CloseModalFn = (key) => {
+    setStatusModal((prevStatusModal) => {
+      const nextStatusModal = { ...prevStatusModal };
+      if (key)
+        nextStatusModal[key] = {
+          ...nextStatusModal[key],
+          opened: false
+        };
+      else
+        modalKeys.forEach((modalKey) => {
+          nextStatusModal[modalKey] = {
+            ...nextStatusModal[modalKey],
+            opened: false
+          };
+        });
 
-  const isOpen: IsOpenFn = (ns, key) =>
-    key
-      ? statusModal.findIndex(
-          (modal) => modal.key !== key && modal.ns === ns
-        ) !== -1
-      : statusModal.length > 0;
+      return nextStatusModal;
+    });
+  };
 
   const renderModals = useMemo(
     () =>
-      statusModal.map((modal, i) => {
-        const Modal = dynamicModals[modal.ns][
-          modal.key as keyof (typeof dynamicModals)[typeof modal.ns]
-        ] as React.FC<ModalProps>;
+      modalKeys
+        .sort((a, b) => statusModal[a].openedAt - statusModal[b].openedAt)
+        .map((modalKey, i) => {
+          if (
+            !statusModal[modalKey].preload &&
+            statusModal[modalKey].openedAt === 0
+          )
+            return null;
 
-        return (
-          <Modal
-            key={modal.key}
-            {...modal.props}
-            onClose={() => {
-              closeModal(modal.ns, modal.key);
-              modal.props?.onClose?.();
-            }}
-            opened
-          />
-        );
-      }),
+          const Modal = dynamicModals[modalKey] as React.FC<ModalProps>;
+          const props = statusModal[modalKey].props;
+          return (
+            <Modal
+              {...props}
+              key={`${modalKey}${statusModal[modalKey].closedAt}`}
+              onExitTransitionEnd={() => {
+                setStatusModal((prevStatusModal) => {
+                  const nextStatusModal = { ...prevStatusModal };
+                  nextStatusModal[modalKey] = {
+                    ...nextStatusModal[modalKey],
+                    closedAt: Date.now()
+                  };
+                  return nextStatusModal;
+                });
+              }}
+              id={modalKey}
+              // closeOnEscape={false}
+              onClose={() => {
+                closeModal(modalKey);
+                props?.onClose?.();
+              }}
+              zIndex={200 + i}
+              opened={statusModal[modalKey].opened}
+            />
+          );
+        }),
     [statusModal]
   );
-
-  useEffect(() => {
-    closeModal();
-  }, [pathname]);
 
   return (
     <ModalManagerContext.Provider
       value={{
         showModal,
-        closeModal,
-        isOpen
+        closeModal
       }}
     >
       {renderModals}
@@ -89,15 +150,10 @@ export const ModalManagerProvider = ({
   );
 };
 
-export const useModalManager: useModalManagerFn = (namespace) => {
+export const useModalManager: useModalManagerFn = () => {
   const context = useContext(ModalManagerContext);
 
   if (context === undefined) throw Error("Out of context: useModalManager");
 
-  return {
-    showModal: (key, props, options) =>
-      context.showModal(namespace, key, props, options),
-    closeModal: (key) => context.closeModal(namespace, key),
-    isOpen: (key) => context.isOpen(namespace, key)
-  };
+  return context;
 };

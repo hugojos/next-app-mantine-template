@@ -4,9 +4,7 @@ import { WithFormProps, withForm } from "src/hocs/withForm";
 export type FormPasswordInputProps = PasswordInputProps & WithFormProps;
 
 const FormPasswordInput = withForm<FormPasswordInputProps>(
-  ({ renderProps: { extraFieldProps, field }, ...props }) => (
-    <PasswordInput {...extraFieldProps} {...field} {...props} />
-  )
+  ({ field, props }) => <PasswordInput {...field} {...props} />
 );
 
 export default FormPasswordInput;

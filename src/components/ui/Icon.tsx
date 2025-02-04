@@ -1,11 +1,8 @@
 "use client";
-import { Box, BoxProps, ElementProps } from "@mantine/core";
-import React from "react";
+import React, { ComponentPropsWithoutRef } from "react";
 
-export interface IconProps
-  extends ElementProps<"svg", "size" | "display" | "opacity">,
-    BoxProps {
-  i: React.FC;
+export interface IconProps extends ComponentPropsWithoutRef<"svg"> {
+  i: React.FC<ComponentPropsWithoutRef<"svg">>;
   /**
    * @property xs: 16px
    * @property sm: 20px
@@ -14,7 +11,6 @@ export interface IconProps
    * @property xl: 32px
    * @property 2xl: 40px
    */
-  c?: string;
   size?: keyof typeof stylesBySize | number;
 }
 
@@ -32,8 +28,7 @@ const Icon = ({
     */
 
   return (
-    <Box
-      component={I}
+    <I
       {...(typeof size === "number"
         ? {
             height: size,

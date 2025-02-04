@@ -1,4 +1,4 @@
-import { Controller, ControllerProps, useFormContext } from "react-hook-form";
+import { Controller, ControllerProps } from "react-hook-form";
 import zodValidator from "src/components/form/utils/zodValidator";
 import { ZodTypeAny } from "zod";
 
@@ -11,43 +11,31 @@ export interface WithFormProps {
   disabled?: boolean;
 }
 
-export type FormFieldProps = {
-  renderProps: Parameters<ControllerProps["render"]>[0] & {
-    extraFieldProps: {
-      label?: React.ReactNode;
-      placeholder?: string;
-      description?: React.ReactNode;
-    };
+export type FormFieldProps<T = unknown> = Parameters<
+  ControllerProps["render"]
+>[0] & {
+  props: T;
+  field: {
+    label?: React.ReactNode;
+    placeholder?: string;
+    description?: React.ReactNode;
+    error?: string;
   };
 };
 
-export const withForm = <P extends object>(
-  WrappedComponent: React.ComponentType<P & FormFieldProps>,
-  controllerProps?: (props: P) => Omit<Partial<ControllerProps>, "render">
+export const withForm = <P extends unknown>(
+  WrappedComponent: React.ComponentType<FormFieldProps<P>>,
+  getControllerProps?: (props: P) => Omit<Partial<ControllerProps>, "render">
 ) => {
-  const Field: React.FC<P & WithFormProps> = (props) => {
-    const { validate, ...withFormRestProps } = props;
-
-    const { formState } = useFormContext();
-
-    const { touchedFields } = formState;
-
-    const name = props.name ?? "";
-
-    const { errors } = formState;
-
-    const placeholder = props.placeholder;
-    const label = props.label;
-    const error = errors[name]?.message as string;
-    const description = props.description;
-
-    const extraFieldProps = {
+  const FormField: React.FC<P & WithFormProps> = (props) => {
+    const {
+      validate,
+      name = "",
       placeholder,
       label,
       description,
-      error: touchedFields[name] ? error : undefined
-    };
-
+      ...withFormRestProps
+    } = props;
     return (
       <Controller
         name={name}
@@ -57,15 +45,23 @@ export const withForm = <P extends object>(
             validate && !props.disabled ? zodValidator(validate) : undefined
         }}
         disabled={props.disabled}
-        {...controllerProps?.(props)}
-        render={(controllerRenderProps) => {
+        {...getControllerProps?.(props)}
+        render={(renderProps) => {
+          const {
+            fieldState: { isTouched, error }
+          } = renderProps;
           const fieldProps = {
-            renderProps: {
-              extraFieldProps,
-              ...controllerRenderProps
+            ...renderProps,
+            props,
+            field: {
+              ...renderProps.field,
+              label,
+              placeholder,
+              description,
+              error: isTouched ? error?.message : undefined
             },
             ...withFormRestProps
-          } as FormFieldProps & P;
+          } as FormFieldProps<P>;
 
           return <WrappedComponent {...fieldProps} />;
         }}
@@ -73,10 +69,7 @@ export const withForm = <P extends object>(
     );
   };
 
-  // Asignamos el displayName
-  const wrappedComponentName =
-    WrappedComponent.displayName || WrappedComponent.name || "Componente";
-  Field.displayName = `withField(${wrappedComponentName})`;
+  FormField.displayName = `withForm(${WrappedComponent.displayName})`;
 
-  return Field;
+  return FormField;
 };

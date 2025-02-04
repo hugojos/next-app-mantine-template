@@ -6,7 +6,7 @@ import "@mantine/dates/styles.css";
 import { Notifications } from "@mantine/notifications";
 import "@mantine/notifications/styles.css";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { theme } from "src/theme";
+import theme from "src/theme";
 
 const client = new QueryClient({
   defaultOptions: {

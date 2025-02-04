@@ -1,66 +1,74 @@
 import { Metadata } from "next";
+import envs from "src/config/envs";
+import isProdEnv from "../isProdEnv";
 
 interface BuildMetadataParams {
-  title: string;
-  description: string;
-  keywords?: string[];
-  url?: string;
+  title?: string;
+  description?: string;
+  keywords: string[];
+  url: string;
 }
 
-export const webTitle = "Plantillas de Memes";
+export const defaultTitle = "Plantillas de Memes";
 
-// TODO: hacer la url canonical como un parametro
+export const defaultDescription =
+  "Pagina recopiladora de plantillas para crear memes en español sin marca de agua, sin texto, sin fondo, de buena calidad y gratis.";
+
+export const siteName = "Plantillas de Memes";
+
+export const defaultImageUrl = `${envs.baseUrl}/assets/share.jpg`;
+
 export const generatePageMetadata = ({
-  title,
-  description,
+  title = defaultTitle,
+  description = defaultDescription,
   keywords,
-  url,
+  url
 }: BuildMetadataParams): Metadata => {
   return {
     title,
-    // authors: [
-    //   {
-    //     name: post.author || "Minh Vu",
-    //   },
-    // ],
-    description: description,
-    keywords: [...(keywords ?? []), "meme", "plantillas", "memes"],
+    description,
+    keywords,
+    metadataBase: new URL(envs.baseUrl),
     openGraph: {
-      title: `${title} | ${webTitle}`,
-      description: description,
-      type: "article",
+      siteName,
+      type: "website",
+      locale: "es",
+      images: {
+        alt: siteName,
+        url: defaultImageUrl
+      },
       url,
-      // publishedTime: post.created_at,
-      // modifiedTime: post.modified_at,
-      // authors: ["https://dminhvu.com/about"],
-      // tags: post.categories,
-      // images: [
-      //   {
-      //     url: `https://ik.imagekit.io/dminhvu/assets/${post.slug}/thumbnail.png?tr=f-png`,
-      //     width: 1024,
-      //     height: 576,
-      //     alt: post.title,
-      //     type: "image/png",
-      //   },
-      // ],
+      title
     },
-    // twitter: {
-    //   card: "summary_large_image",
-    //   site: "@dminhvu02",
-    //   creator: "@dminhvu02",
-    //   title: `${post.title} | dminhvu`,
-    //   description: post.description,
-    //   images: [
-    //     {
-    //       url: `https://ik.imagekit.io/dminhvu/assets/${post.slug}/thumbnail.png?tr=f-png`,
-    //       width: 1024,
-    //       height: 576,
-    //       alt: post.title,
-    //     },
-    //   ],
-    // },
-    // alternates: {
-    //   canonical: `https://dminhvu.com/${post.slug}`,
-    // },
+    robots: isProdEnv
+      ? {
+          index: true,
+          follow: true,
+          googleBot: "index, follow"
+        }
+      : {
+          index: false,
+          follow: false,
+          googleBot: "noindex, nofollow"
+        },
+    applicationName: siteName,
+    appleWebApp: {
+      title,
+      statusBarStyle: "default",
+      capable: true
+    },
+    twitter: {
+      card: "summary",
+      site: url,
+      description,
+      images: {
+        url: defaultImageUrl,
+        alt: siteName
+      },
+      title
+    },
+    alternates: {
+      canonical: url
+    }
   };
 };

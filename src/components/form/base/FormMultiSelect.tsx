@@ -1,19 +1,10 @@
 import { MultiSelect, MultiSelectProps } from "@mantine/core";
-import { Controller } from "react-hook-form";
+import { withForm, WithFormProps } from "src/hocs/withForm";
 
-export interface FormMultiSelectProps extends MultiSelectProps {
-  name: string;
-}
+export type FormMultiSelectProps = MultiSelectProps & WithFormProps;
 
-const FormMultiSelect = ({ name, ...props }: FormMultiSelectProps) => {
-  return (
-    <Controller
-      name={name}
-      render={({ field }) => {
-        return <MultiSelect {...props} {...field} />;
-      }}
-    />
-  );
-};
+const FormMultiSelect = withForm<FormMultiSelectProps>(({ field, props }) => {
+  return <MultiSelect {...field} {...props} />;
+});
 
 export default FormMultiSelect;

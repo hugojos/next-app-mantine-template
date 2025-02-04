@@ -3,15 +3,8 @@ import { WithFormProps, withForm } from "src/hocs/withForm";
 
 type FormCheckboxProps = CheckboxProps & WithFormProps;
 
-const FormCheckbox = withForm<FormCheckboxProps>(
-  ({ renderProps: { extraFieldProps, field }, ...props }) => (
-    <Checkbox
-      {...extraFieldProps}
-      {...field}
-      checked={field.value}
-      {...props}
-    />
-  )
-);
+const FormCheckbox = withForm<FormCheckboxProps>(({ field, props }) => (
+  <Checkbox {...field} checked={field.value} {...props} />
+));
 
 export default FormCheckbox;

@@ -4,9 +4,7 @@ import { WithFormProps, withForm } from "src/hocs/withForm";
 export type FormNumberInputProps = NumberInputProps & WithFormProps;
 
 const FormNumberInput = withForm<FormNumberInputProps>(
-  ({ renderProps: { extraFieldProps, field }, ...props }) => (
-    <NumberInput {...extraFieldProps} {...field} {...props} />
-  )
+  ({ field, ...props }) => <NumberInput {...field} {...props} />
 );
 
 export default FormNumberInput;

@@ -1,26 +1,10 @@
 import { Textarea, TextareaProps } from "@mantine/core";
-import { useFormContext } from "react-hook-form";
-import { ZodTypeAny } from "zod";
-import zodValidator from "../utils/zodValidator";
+import { withForm, WithFormProps } from "src/hocs/withForm";
 
-interface FormTextAreaProps extends TextareaProps {
-  validate?: ZodTypeAny;
-}
+export type FormTextarea = TextareaProps & WithFormProps;
 
-const FormTextarea = ({ validate, ...props }: FormTextAreaProps) => {
-  const { register, formState } = useFormContext();
-  const name = props.name ?? "";
-  const error = formState.errors[name]?.message as string;
-
-  return (
-    <Textarea
-      error={error}
-      {...props}
-      {...register(name, {
-        validate: validate ? zodValidator(validate) : undefined,
-      })}
-    />
-  );
-};
+const FormTextarea = withForm<TextareaProps>(({ field, props }) => {
+  return <Textarea {...field} {...props} />;
+});
 
 export default FormTextarea;
