@@ -1,34 +1,32 @@
 "use client";
-import { createContext, useContext, useEffect, useState } from "react";
-import useMe from "src/services/auth/useMe";
-import Doctor from "src/types/api/Doctor";
+import { createContext, useContext } from "react";
 
-const authContext = createContext<
-  { user: Doctor | null; refreshSession: () => void } | undefined
->(undefined);
+const authContext = createContext<{} | undefined>(undefined);
+// { user: Doctor | null; refreshSession: () => void } | undefined
 
 const AuthProvider = ({
-  children,
-  initialUser
+  children
+  // initialUser
 }: {
   children: React.ReactNode;
-  initialUser: Doctor | null;
+  // initialUser: Doctor | null;
 }) => {
-  const [user, setUser] = useState<Doctor | null>(initialUser);
-  const me = useMe({
-    enabled: !!initialUser
-  });
+  // const [user, setUser] = useState<Doctor | null>(initialUser);
+  // const me = useMe({
+  //   enabled: !!initialUser
+  // });
 
-  useEffect(() => {
-    if (me.isSuccess) setUser(me.data.doctor);
-  }, [me.isSuccess]);
+  // useEffect(() => {
+  //   if (me.isSuccess) setUser(me.data.doctor);
+  // }, [me.isSuccess]);
 
   return (
     <authContext.Provider
-      value={{
-        user,
-        refreshSession: me.refetch
-      }}
+      value={{}}
+      // value={{
+      //   user,
+      //   refreshSession: me.refetch
+      // }}
     >
       {children}
     </authContext.Provider>

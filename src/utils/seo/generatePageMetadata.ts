@@ -9,12 +9,11 @@ interface BuildMetadataParams {
   url: string;
 }
 
-export const defaultTitle = "Plantillas de Memes";
+export const defaultTitle = "Next";
 
-export const defaultDescription =
-  "Pagina recopiladora de plantillas para crear memes en español sin marca de agua, sin texto, sin fondo, de buena calidad y gratis.";
+export const defaultDescription = "default description";
 
-export const siteName = "Plantillas de Memes";
+export const siteName = "Next";
 
 export const defaultImageUrl = `${envs.baseUrl}/assets/share.jpg`;
 

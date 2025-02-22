@@ -50,6 +50,7 @@ export const withForm = <P extends unknown>(
           const {
             fieldState: { isTouched, error }
           } = renderProps;
+
           const fieldProps = {
             ...renderProps,
             props,

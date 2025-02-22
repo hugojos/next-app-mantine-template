@@ -4,7 +4,7 @@ import {
   FormProvider,
   SubmitErrorHandler,
   SubmitHandler,
-  UseFormReturn
+  UseFormReturn,
 } from "react-hook-form";
 
 interface FormProps<T extends FieldValues>

@@ -1,17 +1,17 @@
 // getKey debe retorner un string o un array de strings o NULL <- ahora retorna undefined, no coicinde con groupBy
 export function indexBy<T, K, C extends string>(
   arr: T[],
-  getKey: (item: T) => C | undefined,
+  getKey: (item: T) => C | undefined
 ): Record<C, T | undefined>;
 export function indexBy<T, K, C extends string>(
   arr: T[],
   getKey: (item: T) => C | undefined,
-  getValue: (item: T) => K,
+  getValue: (item: T) => K
 ): Record<C, K | undefined>;
 export function indexBy<T, K>(
   arr: T[],
   getKey: (item: T) => string | undefined,
-  getValue?: (item: T) => K,
+  getValue?: (item: T) => K
 ) {
   if (getValue)
     return arr.reduce(
@@ -21,7 +21,7 @@ export function indexBy<T, K>(
         acc[key] = getValue(item);
         return acc;
       },
-      {} as Record<string, K>,
+      {} as Record<string, K>
     );
 
   return arr.reduce(
@@ -31,14 +31,14 @@ export function indexBy<T, K>(
       acc[key] = item;
       return acc;
     },
-    {} as Record<string, T>,
+    {} as Record<string, T>
   );
 }
 
 // falta agregar getValue como tercer parametro opcional
 export const groupBy = <T extends any>(
   arr: T[],
-  getKey: (item: T) => string | string[] | null,
+  getKey: (item: T) => string | string[] | null
 ) => {
   const groups: Record<string, T[] | undefined> = {};
 

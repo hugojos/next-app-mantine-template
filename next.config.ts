@@ -1,7 +1,15 @@
-/** @type {import('next').NextConfig} */
-const nextConfig = {
+import { NextConfig } from "next";
+
+const nextConfig: NextConfig = {
   experimental: {
-    // optimizePackageImports: ["components/ui", "components/form", "icons"],
+    optimizePackageImports: [
+      "components/ui",
+      "components/form",
+      "icons",
+      "@mantine/core",
+      "@mantine/hooks",
+      "@mantine/spotlight"
+    ],
     turbo: {
       rules: {
         "*.svg": {
@@ -11,9 +19,14 @@ const nextConfig = {
       }
     }
   },
+  logging: {
+    fetches: {
+      fullUrl: true
+    }
+  },
   webpack(config) {
     // Grab the existing rule that handles SVG imports
-    const fileLoaderRule = config.module.rules.find((rule) =>
+    const fileLoaderRule = config.module.rules.find((rule: any) =>
       rule.test?.test?.(".svg")
     );
 
@@ -40,13 +53,14 @@ const nextConfig = {
     return config;
   },
   images: {
+    // unoptimized: true,
     remotePatterns: [
       {
         protocol: "https",
         hostname: "aestrenar-dev.s3.amazonaws.com"
-      },
+      }
     ]
-  },
+  }
 };
 
 const withBundleAnalyzer = require("@next/bundle-analyzer")({

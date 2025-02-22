@@ -1,10 +1,5 @@
 const getHref = {
-  ranking: {
-    users: () => "/ranking/usuarios"
-  },
-  favorites: () => `/favoritos`,
-  terms: () => `/terminos-y-condiciones`,
-  privacy: () => `/politicas-de-privacidad`
+  home: () => `/`
 } as const;
 
 export default getHref;

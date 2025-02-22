@@ -1,13 +1,13 @@
 interface PageParams extends Record<string, string | string[] | undefined> {
-  locale: string;
+  // shared params
 }
 
 export default interface PageProps {
-  params: PageParams;
-  searchParams: { [key: string]: string | string[] | undefined };
+  params: Promise<PageParams>;
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }
 
 export interface LayoutProps {
   children: React.ReactNode;
-  params: PageParams;
+  params: Promise<PageParams>;
 }

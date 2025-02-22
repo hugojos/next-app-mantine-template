@@ -2,7 +2,8 @@ import {
   createTheme,
   DEFAULT_THEME,
   DefaultMantineColor,
-  MantineColorShade
+  MantineColorShade,
+  Notification
 } from "@mantine/core";
 
 export const breakpointsWithPx = {
@@ -31,7 +32,16 @@ export const twColors = Object.entries(DEFAULT_THEME.colors).reduce(
 );
 
 const theme = createTheme({
-  breakpoints: breakpointsWithPx
+  breakpoints: breakpointsWithPx,
+  components: {
+    Notification: Notification.extend({
+      defaultProps: {
+        withBorder: true
+      }
+    })
+  },
+  cursorType: "pointer",
+  defaultRadius: "md"
 });
 
 export default theme;

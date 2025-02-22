@@ -5,7 +5,7 @@ const EmailField = (props: FormTextInputProps) => (
   <FormTextInput
     name="email"
     label="Email"
-    validate={string().email()}
+    validate={string().min(1).max(250).email()}
     required
     {...props}
   />
