@@ -1,4 +1,5 @@
 import { ColorSchemeScript, mantineHtmlProps } from "@mantine/core";
+import "@mantine/dates/styles.css";
 import { Metadata, Viewport } from "next";
 import "src/styles/global.css";
 import isProdEnv from "src/utils/isProdEnv";
