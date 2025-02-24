@@ -1,4 +1,5 @@
 import { Metadata } from "next";
+import HomeView from "src/components/views/Home";
 import envs from "src/config/envs";
 import getHref from "src/config/getHref";
 import PageProps from "src/types/PageProps";
@@ -14,7 +15,7 @@ export async function generateMetadata(props: PageProps): Promise<Metadata> {
   });
 }
 function Page() {
-  return <div>hola</div>;
+  return <HomeView />;
 }
 
 export default Page;
