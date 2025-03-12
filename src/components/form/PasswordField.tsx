@@ -1,13 +1,26 @@
+import { ActionIcon } from "@mantine/core";
+import { useState } from "react";
+import { EyeIcon } from "src/icons";
 import { string } from "zod";
-import FormPasswordInput, {
-  FormPasswordInputProps,
-} from "./base/FormPasswordInput";
+import Icon from "../ui/Icon";
+import FormTextInput, { FormTextInputProps } from "./base/FormTextInput";
 
-const PasswordField = (props: FormPasswordInputProps) => {
+const PasswordField = (props: FormTextInputProps) => {
+  const [visible, setVisible] = useState(false);
   return (
-    <FormPasswordInput
+    <FormTextInput
       label="Contraseña"
       name="password"
+      type={visible ? "text" : "password"}
+      rightSection={
+        <ActionIcon
+          variant="transparent"
+          color="currentColor"
+          onClick={() => setVisible((v) => !v)}
+        >
+          <Icon i={EyeIcon} size={"sm"} />
+        </ActionIcon>
+      }
       validate={string().min(1).min(6).max(25)}
       required
       {...props}

@@ -1,6 +1,6 @@
 import { ColorSchemeScript, mantineHtmlProps } from "@mantine/core";
-import "@mantine/dates/styles.css";
 import { Metadata, Viewport } from "next";
+import { Raleway } from "next/font/google";
 import "src/styles/global.css";
 import isProdEnv from "src/utils/isProdEnv";
 import {
@@ -27,9 +27,11 @@ export const metadata: Metadata = {
       }
 };
 
+const raleway = Raleway({ subsets: ["latin"], display: "swap" });
+
 export default function RootLayout({ children }: { children: any }) {
   return (
-    <html lang="es" {...mantineHtmlProps}>
+    <html lang="es" {...mantineHtmlProps} className={raleway.className}>
       <head>
         <ColorSchemeScript defaultColorScheme="light" />
       </head>

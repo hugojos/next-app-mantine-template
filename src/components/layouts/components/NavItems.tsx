@@ -1,17 +1,21 @@
 import { NavLink, Stack } from "@mantine/core";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { MouseEvent } from "react";
+import { MouseEvent, ReactNode } from "react";
 
 interface NavItemsProps {
   items: {
-    label: string;
-    href?: string;
-    leftSection?: React.ReactNode;
+    leftSection?: ReactNode;
+    rightSection?: ReactNode;
     onClick?: (e: MouseEvent<Element>) => void;
     disabled?: boolean;
-    isActive?: boolean;
     className?: string;
+    children?: ReactNode;
+    label: string;
+
+    // custom props
+    href?: string;
+    isActive?: boolean;
   }[];
 }
 
@@ -20,35 +24,27 @@ const NavItems = ({ items }: NavItemsProps) => {
 
   return (
     <Stack gap={0}>
-      {items.map((item) => {
-        const props = {
-          label: item.label,
-          leftSection: item.leftSection,
-          onClick: item.onClick,
-          disabled: item.disabled,
-          className: item.className,
-        };
-
-        if (item.href) {
-          const isActive = item.isActive ?? pathname === item.href;
+      {items.map(({ href, isActive, ...navLinkProps }) => {
+        if (href) {
+          const active = isActive ?? pathname === href;
           return (
             <NavLink
-              active={isActive}
-              key={item.label}
+              active={active}
+              key={navLinkProps.label}
               component={Link}
               prefetch={false}
-              href={item.href}
-              {...props}
+              href={href}
+              {...navLinkProps}
             />
           );
         }
 
         return (
           <NavLink
-            key={item.label}
-            active={item.isActive}
+            key={navLinkProps.label}
+            active={isActive}
             component="button"
-            {...props}
+            {...navLinkProps}
           />
         );
       })}

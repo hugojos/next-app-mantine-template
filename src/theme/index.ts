@@ -32,6 +32,7 @@ export const twColors = Object.entries(DEFAULT_THEME.colors).reduce(
 );
 
 const theme = createTheme({
+  fontFamily: "Raleway, Raleway Fallback",
   breakpoints: breakpointsWithPx,
   components: {
     Notification: Notification.extend({

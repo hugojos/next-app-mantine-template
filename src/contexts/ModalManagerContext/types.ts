@@ -24,15 +24,12 @@ type Diff<T, U> = T extends U ? never : T;
 type Minus<T, U> = Pick<T, Diff<keyof T, keyof U>>;
 
 export type StatusModal = {
-  key: ModalKeys;
+  modalKey: ModalKeys;
   props: any;
-  opened: boolean;
-  openedAt: number;
-  closedAt: number;
-  preload: boolean;
+  opened?: boolean;
 };
 
-export type useModalManagerFn = () => {
+export type UseModalManagerFn = () => {
   showModal: <T extends ModalKeys, M extends (typeof dynamicModals)[T]>(
     key: T,
     props?: Minus<ExtractProps<M>, Omit<ModalRootProps, "title">>,
