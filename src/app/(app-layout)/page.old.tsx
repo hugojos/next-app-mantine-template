@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import HomeView from "src/components/views/Home";
+import HomeView from "src/components/views/app/Home";
 import envs from "src/config/envs";
 import getHref from "src/config/getHref";
 import PageProps from "src/types/PageProps";
