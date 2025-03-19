@@ -11,11 +11,7 @@ export interface PaginationQueryParams {
   pageSize?: number;
 }
 
-const createPagination = <
-  TFnData = unknown,
-  TVariables = void,
-  TError = Error
->({
+const createInfinity = <TFnData = unknown, TVariables = void, TError = Error>({
   fetchUrl,
   ...options
 }: Partial<
@@ -36,7 +32,7 @@ const createPagination = <
       lastPage.pageData.currentPage.hasNext ? lastPageParam + 1 : undefined,
     fetcher: (variables, { pageParam }) =>
       fetchApi
-        .get(
+        .post(
           `${fetchUrl}?${queryString.stringify({
             pageSize: 10,
             ...variables,
@@ -48,4 +44,4 @@ const createPagination = <
   });
 };
 
-export default createPagination;
+export default createInfinity;

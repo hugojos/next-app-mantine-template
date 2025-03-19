@@ -30,7 +30,10 @@ export type StatusModal = {
 };
 
 export type UseModalManagerFn = () => {
-  showModal: <T extends ModalKeys, M extends (typeof dynamicModals)[T]>(
+  showModal: <
+    T extends ModalKeys,
+    M extends (typeof dynamicModals)[T]["component"]
+  >(
     key: T,
     props?: Minus<ExtractProps<M>, Omit<ModalRootProps, "title">>,
     options?: { multiple: boolean }

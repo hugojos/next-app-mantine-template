@@ -35,7 +35,7 @@ export default function RootLayout({ children }: { children: any }) {
       <head>
         <ColorSchemeScript defaultColorScheme="light" />
       </head>
-      <body>
+      <body className="text-gray-9">
         <AppProviders>{children}</AppProviders>
       </body>
     </html>

@@ -13,7 +13,6 @@ const AppContainer = ({ children }: { children: React.ReactNode }) => {
         collapsed: { mobile: !openNavbar },
       }}
       aside={{ width: 275, breakpoint: "2xl", collapsed: { mobile: true } }}
-      padding={8}
     >
       {children}
     </AppShell>

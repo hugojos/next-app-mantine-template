@@ -1,23 +1,16 @@
-import { ModalProps } from "@mantine/core";
 import dynamic from "next/dynamic";
 import { ComponentType } from "react";
+import { ModalConfirmProps } from "./common/Confirm";
 
-const dynamicModal = <T extends ModalProps>(
+const dynamicModal = <T,>(
   path: string
 ): { component: ComponentType<T>; path: string } => ({
   component: dynamic(() => import(`src/components/modals/${path}`), {
     ssr: false
-    // loading(loadingProps) {
-    //   return (
-    //     <Overlay zIndex={1000} className="grid place-items-center">
-    //       <Loader />
-    //     </Overlay>
-    //   );
-    // },
-  }),
+  }) as ComponentType<T>,
   path
 });
 
 export const dynamicModals = {
-  example: dynamicModal("module/example")
+  "common.confirm": dynamicModal<ModalConfirmProps>("common/Confirm")
 } as const;

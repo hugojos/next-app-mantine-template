@@ -1,4 +1,5 @@
 import {
+  AppShell,
   createTheme,
   DEFAULT_THEME,
   DefaultMantineColor,
@@ -38,6 +39,11 @@ const theme = createTheme({
     Notification: Notification.extend({
       defaultProps: {
         withBorder: true
+      }
+    }),
+    AppShell: AppShell.extend({
+      defaultProps: {
+        padding: 0
       }
     })
   },
