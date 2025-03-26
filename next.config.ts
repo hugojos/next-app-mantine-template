@@ -3,9 +3,9 @@ import { NextConfig } from "next";
 const nextConfig: NextConfig = {
   experimental: {
     optimizePackageImports: [
-      "components/ui",
-      "components/form",
-      "icons",
+      "src/components/ui",
+      "src/components/form",
+      "src/icons",
       "@mantine/core",
       "@mantine/hooks",
       "@mantine/spotlight"
