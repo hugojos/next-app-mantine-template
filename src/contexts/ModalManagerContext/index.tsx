@@ -1,22 +1,23 @@
 "use client";
-import { createContext, useContext, useEffect, useMemo, useState } from "react";
+import type { ModalManagerWrapperProps } from "lkd-web-kit";
+import { createContext, use, useEffect, useMemo, useState } from "react";
 import { dynamicModals } from "src/components/modals";
-import {
+import type {
   CloseModalFn,
   ModalKeys,
   ModalManagerValues,
   ShowModalFn,
   StatusModal,
-  UseModalManagerFn
+  UseModalManagerFn,
 } from "./types";
 
 const ModalManagerContext = createContext<ModalManagerValues | undefined>(
-  undefined
+  undefined,
 );
 
 export const ModalManagerProvider = ({
   children,
-  loadModals = []
+  loadModals = [],
 }: {
   children: React.ReactNode;
   loadModals?: (ModalKeys | (string & {}))[];
@@ -39,50 +40,50 @@ export const ModalManagerProvider = ({
     setStatusModal((prev) =>
       options?.multiple
         ? [...prev, { modalKey: key, props, opened: true }]
-        : [{ modalKey: key, props, opened: true }]
+        : [{ modalKey: key, props, opened: true }],
     );
   };
 
   const closeModal: CloseModalFn = (key) => {
     if (key === undefined) {
       setStatusModal((prev) =>
-        prev.map((modal) => ({ ...modal, opened: false }))
+        prev.map((modal) => ({ ...modal, opened: false })),
       );
       return;
     }
 
     setStatusModal((prev) =>
       prev.map((modal) =>
-        modal.modalKey === key ? { ...modal, opened: false } : modal
-      )
+        modal.modalKey === key ? { ...modal, opened: false } : modal,
+      ),
     );
   };
 
   const renderModals = useMemo(
     () =>
-      statusModal.map(({ modalKey, props, opened }, i) => {
-        const Component = dynamicModals[modalKey]?.component;
+      statusModal.map(({ modalKey, props, opened, modalProps }, i) => {
+        const Component = dynamicModals[modalKey]
+          ?.component as React.FC<ModalManagerWrapperProps>;
         if (!Component) return null;
         return (
           <Component
             {...props}
             key={modalKey}
-            opened={opened}
+            modalProps={{ ...modalProps, opened, zIndex: 200 + i }}
             removeModal={() => {
               setStatusModal((prev) => prev.filter((_, index) => index !== i));
             }}
-            zIndex={200 + i}
           />
         );
       }),
-    [statusModal]
+    [statusModal],
   );
 
   return (
     <ModalManagerContext.Provider
       value={{
         showModal,
-        closeModal
+        closeModal,
       }}
     >
       {renderModals}
@@ -92,9 +93,9 @@ export const ModalManagerProvider = ({
 };
 
 export const useModalManager: UseModalManagerFn = () => {
-  const context = useContext(ModalManagerContext);
+  const context = use(ModalManagerContext);
 
   if (context === undefined) throw Error("Out of context: useModalManager");
 
-  return context;
+  return context ?? {};
 };

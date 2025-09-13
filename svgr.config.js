@@ -1,12 +1,12 @@
-const path = require("path");
+const path = require("node:path");
 // .svgrrc.js
 module.exports = {
-  ref: true,
+  template: require("./src/icons/template"),
   jsx: {
     babelConfig: {
       plugins: [
         [
-          path.resolve("./svgr-dynamic-ids.js"),
+          path.resolve("./src/icons/svgr-dynamic-ids.js"),
           {
             prefix: true,
           },
@@ -14,4 +14,4 @@ module.exports = {
       ],
     },
   },
-}
+};

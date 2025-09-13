@@ -1,11 +1,12 @@
 import { ColorSchemeScript, mantineHtmlProps } from "@mantine/core";
-import { Metadata, Viewport } from "next";
+import type { Metadata, Viewport } from "next";
 import { Raleway } from "next/font/google";
 import "src/styles/global.css";
+import type { LayoutProps } from "lkd-web-kit";
 import isProdEnv from "src/utils/isProdEnv";
 import {
   defaultDescription,
-  defaultTitle
+  defaultTitle,
 } from "src/utils/seo/generatePageMetadata";
 import AppProviders from "./AppProviders";
 
@@ -16,20 +17,20 @@ export const metadata: Metadata = {
   description: defaultDescription,
   robots: isProdEnv
     ? {
-        index: true,
-        follow: true,
-        googleBot: "index, follow"
-      }
+      index: true,
+      follow: true,
+      googleBot: "index, follow",
+    }
     : {
-        index: false,
-        follow: false,
-        googleBot: "noindex, nofollow"
-      }
+      index: false,
+      follow: false,
+      googleBot: "noindex, nofollow",
+    },
 };
 
 const raleway = Raleway({ subsets: ["latin"], display: "swap" });
 
-export default function RootLayout({ children }: { children: any }) {
+export default function RootLayout({ children }: LayoutProps) {
   return (
     <html lang="es" {...mantineHtmlProps} className={raleway.className}>
       <head>

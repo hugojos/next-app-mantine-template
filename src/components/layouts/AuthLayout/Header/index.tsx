@@ -1,6 +1,6 @@
 import { AppShellHeader, Flex, Group } from "@mantine/core";
 import Link from "next/link";
-import getHref from "src/config/getHref";
+import routes from "src/config/routes";
 
 const Header = async () => {
   return (
@@ -8,7 +8,7 @@ const Header = async () => {
       <Flex align="center" justify="space-between" className="h-full">
         <Group align="center" gap={12}>
           <Link
-            href={getHref.home()}
+            href={routes.home()}
             prefetch={false}
             aria-label="Ir a la home"
           >

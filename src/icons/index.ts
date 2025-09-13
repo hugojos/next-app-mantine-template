@@ -1,2 +1,2 @@
-export { default as CalendarIcon } from "./calendar.svg";
-export { default as EyeIcon } from "./eye.svg";
+export { default as IconCalendar } from "./calendar.svg";
+export { default as IconEye } from "./eye.svg";

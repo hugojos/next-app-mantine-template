@@ -1,33 +1,22 @@
 "use client";
 
 import { createContext, useContext } from "react";
-import { ApiList } from "src/types/api/ApiList";
+import { ApiData } from "./requestByApiData";
 
-const ApiData = createContext<ApiData | undefined>(undefined);
+const apiData = createContext<ApiData | undefined>(undefined);
 
 interface ApiDataProviderProps {
   children: React.ReactNode;
-  apiData: ApiData;
+  value: ApiData;
 }
 
-export const ApiDataProvider = ({
-  apiData,
-  children
-}: ApiDataProviderProps) => (
-  <ApiData.Provider value={apiData}>{children}</ApiData.Provider>
+export const ApiDataProvider = ({ value, children }: ApiDataProviderProps) => (
+  <apiData.Provider value={value}>{children}</apiData.Provider>
 );
 
 export const useApiData = <T extends keyof ApiData>(apiDataKey: T) => {
-  const { apiData } = useContext(ApiData) as { apiData: ApiData };
-  const data = apiData[apiDataKey] as ApiData[T];
+  const ctx = useContext(apiData);
+  const data = ctx?.[apiDataKey];
   if (data === undefined) throw new Error(`ApiData not found: ${apiDataKey}`);
   return data;
 };
-
-export const requestByApiDataKey: Record<keyof ApiData, () => unknown> = {
-  amenities: () => undefined
-};
-
-export interface ApiData {
-  amenities?: ApiList<any>;
-}

@@ -1,6 +1,5 @@
-interface HomeViewProps {}
 
-const HomeView = ({}: HomeViewProps) => {
+const HomeView = () => {
   return <div></div>;
 };
 

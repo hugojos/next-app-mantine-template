@@ -5,7 +5,7 @@ const envs = {
     (process.env.NEXT_PUBLIC_VERCEL_ENV as
       | "development"
       | "production"
-      | "preview") ?? "development"
+      | "preview") ?? "development",
 };
 
 export default envs;

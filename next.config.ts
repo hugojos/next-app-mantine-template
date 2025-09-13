@@ -1,33 +1,28 @@
-import { NextConfig } from "next";
+import bundleAnalyzer from "@next/bundle-analyzer";
+import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  typedRoutes: false,
+  turbopack: {
+    rules: {
+      "*.svg": {
+        loaders: ["@svgr/webpack"],
+        as: "*.js",
+      },
+    },
+  },
   experimental: {
-    optimizePackageImports: [
-      "src/components/ui",
-      "src/components/form",
-      "src/icons",
-      "@mantine/core",
-      "@mantine/hooks",
-      "@mantine/spotlight"
-    ],
-    turbo: {
-      rules: {
-        "*.svg": {
-          loaders: ["@svgr/webpack"],
-          as: "*.js"
-        }
-      }
-    }
+    optimizePackageImports: ["src/icons", "lkd-web-kit", "@mantine/core"],
   },
   logging: {
     fetches: {
-      fullUrl: true
-    }
+      fullUrl: true,
+    },
   },
   webpack(config) {
     // Grab the existing rule that handles SVG imports
     const fileLoaderRule = config.module.rules.find((rule: any) =>
-      rule.test?.test?.(".svg")
+      rule.test?.test?.(".svg"),
     );
 
     config.module.rules.push(
@@ -35,14 +30,14 @@ const nextConfig: NextConfig = {
       {
         ...fileLoaderRule,
         test: /\.svg$/i,
-        resourceQuery: /url/ // *.svg?url
+        resourceQuery: /url/, // *.svg?url
       },
       // Convert all other *.svg imports to React components
       {
         test: /\.svg$/i,
         resourceQuery: { not: /url/ }, // exclude if *.svg?url
-        use: "@svgr/webpack"
-      }
+        use: "@svgr/webpack",
+      },
     );
 
     // Modify the file loader rule to ignore *.svg, since we have it handled now.
@@ -52,19 +47,10 @@ const nextConfig: NextConfig = {
 
     return config;
   },
-  images: {
-    // unoptimized: true,
-    remotePatterns: [
-      {
-        protocol: "https",
-        hostname: "aestrenar-dev.s3.amazonaws.com"
-      }
-    ]
-  }
 };
 
-const withBundleAnalyzer = require("@next/bundle-analyzer")({
-  enabled: process.env.ANALYZE === "true"
+const withBundleAnalyzer = bundleAnalyzer({
+  enabled: process.env.ANALYZE === "true",
 });
 
-module.exports = withBundleAnalyzer(nextConfig);
+export default withBundleAnalyzer(nextConfig);

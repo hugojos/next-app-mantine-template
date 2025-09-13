@@ -2,10 +2,10 @@
 import { AppShellNavbar } from "@mantine/core";
 
 import { usePathname, useRouter } from "next/navigation";
-import getHref from "src/config/getHref";
 import { useModalManager } from "src/contexts/ModalManagerContext";
-import NavItems from "../components/NavItems";
 import useAppContainerStore from "./useAppContainerStore";
+import { NavItems } from "lkd-web-kit";
+import routes from "src/config/routes";
 
 const Navbar = () => {
   const { showModal } = useModalManager();
@@ -27,7 +27,7 @@ const Navbar = () => {
           items={[
             {
               label: "Home",
-              href: getHref.home(),
+              href: routes.home(),
               // leftSection: <IconFlame />,
               onClick
             }
