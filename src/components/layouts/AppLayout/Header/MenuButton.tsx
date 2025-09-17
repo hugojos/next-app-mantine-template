@@ -2,9 +2,8 @@
 import { ActionIcon } from "@mantine/core";
 import useAppContainerStore from "../useAppContainerStore";
 
-interface MenuButtonProps {}
 
-const MenuButton = ({}: MenuButtonProps) => {
+const MenuButton = () => {
   const { openNavbar, toggleNavbar } = useAppContainerStore();
 
   return (

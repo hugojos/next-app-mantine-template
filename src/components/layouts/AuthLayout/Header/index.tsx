@@ -2,7 +2,7 @@ import { AppShellHeader, Flex, Group } from "@mantine/core";
 import Link from "next/link";
 import routes from "src/config/routes";
 
-const Header = async () => {
+const Header = () => {
   return (
     <AppShellHeader px={8}>
       <Flex align="center" justify="space-between" className="h-full">
